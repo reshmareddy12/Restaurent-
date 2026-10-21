@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpiceVilla - Authentic Indian Flavors</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+:root{--orange:#ff6b35;--dark:#1a1a1a;--light:#fff8f0;--red:#d32f2f}
+body{background:var(--light);color:var(--dark);scroll-behavior:smooth}
+nav{position:sticky;top:0;z-index:99;background:rgba(26,26,26,0.95);color:white;display:flex;justify-content:space-between;align-items:center;padding:14px 5%}
+.logo{font-family:'Playfair Display',serif;font-size:1.7rem}.logo span{color:var(--orange)}
+.nav-links{display:flex;list-style:none;gap:24px}
+.nav-links a{color:#ddd;text-decoration:none;font-weight:500}
+.nav-links a:hover{color:var(--orange)}
+.cart{cursor:pointer;background:var(--orange);padding:6px 14px;border-radius:20px;color:white}
+.hero{height:85vh;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.4)),url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80') center/cover;display:flex;align-items:center;padding:0 5%;color:white}
+.hero h1{font-family:'Playfair Display',serif;font-size:3.8rem;line-height:1.1}
+.hero h1 span{color:var(--orange)}
+.hero p{margin:15px 0 25px;max-width:500px;font-size:1.1rem;opacity:0.9}
+.btn{background:var(--orange);color:white;border:none;padding:12px 26px;border-radius:30px;font-weight:600;cursor:pointer;transition:0.3s}
+.btn:hover{transform:translateY(-2px);background:#e55a2b}
+.btn-outline{background:transparent;border:2px solid white;color:white;margin-left:10px}
+.section{padding:70px 5%}
+.title{font-family:'Playfair Display',serif;font-size:2.3rem;text-align:center;margin-bottom:10px}
+.sub{color:#777;text-align:center;margin-bottom:30px}
+.offers{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.offer-card{background:linear-gradient(135deg,#ff6b35,#d32f2f);color:white;padding:24px;border-radius:16px;position:relative;overflow:hidden}
+.offer-card:nth-child(2){background:linear-gradient(135deg,#1a1a1a,#444)}
+.offer-card:nth-child(3){background:linear-gradient(135deg,#ffb347,#ff6b35)}
+.offer-card h3{font-size:1.4rem}.offer-card p{opacity:0.9;margin:8px 0}
+.filters{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:25px}
+.filters button{padding:8px 18px;border-radius:20px;border:1.5px solid #ddd;background:white;cursor:pointer}
+.filters button.active{background:var(--orange);color:white;border-color:var(--orange)}
+.menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
+.food{background:white;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.07);transition:0.3s}
+.food:hover{transform:translateY(-5px)}
+.food img{width:100%;height:170px;object-fit:cover}
+.food-body{padding:14px}
+.food-body h4{display:flex;justify-content:space-between}
+.price{color:var(--orange);font-weight:700}
+.food-body p{color:#666;font-size:0.85rem;height:36px;overflow:hidden;margin:6px 0}
+.food-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.veg{font-size:0.75rem;padding:2px 8px;border-radius:10px}.veg.veg-true{background:#e8f5e9;color:green}.veg.veg-false{background:#ffebee;color:red}
+.reservation{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:1100px;margin:0 auto}
+.form-box,.info-box{background:white;padding:24px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+.form-box input,.form-box select,.form-box textarea{width:100%;padding:12px 14px;margin-bottom:12px;border:1px solid #ddd;border-radius:10px}
+.row{display:flex;gap:12px}
+.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.map{width:100%;height:350px;border-radius:16px;border:0}
+footer{background:var(--dark);color:#aaa;padding:40px 5% 20px}
+.footer{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px}
+.footer h4{color:white;margin-bottom:10px}
+.copy{text-align:center;margin-top:30px;border-top:1px solid #333;padding-top:15px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;justify-content:center;align-items:center;padding:20px}
+.modal.show{display:flex}
+.modal-box{background:white;width:100%;max-width:500px;border-radius:16px;padding:20px;max-height:90vh;overflow:auto}
+.toast{position:fixed;bottom:20px;right:20px;background:#111;color:white;padding:12px 20px;border-radius:10px;display:none;z-index:300}
+.toast.show{display:block}
+@media(max-width:800px){.reservation,.loc-grid{grid-template-columns:1fr}.row{flex-direction:column}.hero h1{font-size:2.5rem}.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">🍛 <span>Spice</span>Villa</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#offers">Offers</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reservation">Reservation</a></li>
+    <li><a href="#location">Location</a></li>
+  </ul>
+  <div class="cart" onclick="openCart()">🛒 Cart <span id="cartCount">0</span></div>
+</nav>
+
+<section id="home" class="hero">
+  <div>
+    <h1>Authentic Taste,<br><span>Unforgettable</span> Feast</h1>
+    <p>Experience the rich flavors of Hyderabad - from Dum Biryani to Butter Naan. Fresh, spicy, and made with love.</p>
+    <button class="btn" onclick="document.getElementById('menu').scrollIntoView()">View Menu</button>
+    <button class="btn btn-outline" onclick="document.getElementById('reservation').scrollIntoView()">Book Table</button>
+    <p style="margin-top:15px;font-size:0.85rem">⏰ Open: 11AM - 11PM | 📞 +91 98765 43210</p>
+  </div>
+</section>
+
+<section id="offers" class="section">
+  <h2 class="title">Today's Special Offers</h2>
+  <p class="sub">Limited time deals - don't miss out!</p>
+  <div class="offers">
+    <div class="offer-card">
+      <h3>🔥 50% OFF on Biryani</h3>
+      <p>Every Monday & Wednesday on Chicken Dum Biryani</p>
+      <b>Use Code: BIRYANI50</b><br><br>
+      <button class="btn" style="background:white;color:#d32f2f" onclick="applyOffer('BIRYANI50')">Claim Now</button>
+    </div>
+    <div class="offer-card">
+      <h3>👨‍👩‍👧‍👦 Family Combo ₹999</h3>
+      <p>2 Biryani + 4 Naan + Paneer Curry + Drinks</p>
+      <b>Save ₹400</b><br><br>
+      <button class="btn" onclick="addCombo()">Add to Cart</button>
+    </div>
+    <div class="offer-card">
+      <h3>🎉 Free Dessert</h3>
+      <p>Free Gulab Jamun on orders above ₹500</p>
+      <b>Auto Applied</b><br><br>
+      <button class="btn" style="background:white;color:var(--orange)" onclick="document.getElementById('menu').scrollIntoView()">Order Now</button>
+    </div>
+  </div>
+</section>
+
+<section id="menu" class="section">
+  <h2 class="title">Our Delicious Menu</h2>
+  <p class="sub">Fresh ingredients, authentic recipes, made daily</p>
+  <div class="filters">
+    <button class="active" onclick="filterMenu('all',this)">All</button>
+    <button onclick="filterMenu('Biryani',this)">Biryani</button>
+    <button onclick="filterMenu('Starter',this)">Starters</button>
+    <button onclick="filterMenu('Curry',this)">Curries</button>
+    <button onclick="filterMenu('Bread',this)">Breads</button>
+    <button onclick="filterMenu('Dessert',this)">Desserts</button>
+    <button onclick="filterMenu('veg',this)">Veg Only</button>
+  </div>
+  <div class="menu" id="menuGrid"></div>
+</section>
+
+<section id="reservation" class="section" style="background:white">
+  <h2 class="title">Table Reservation</h2>
+  <p class="sub">Book your table in advance - no waiting!</p>
+  <div class="reservation">
+    <form id="resForm" class="form-box">
+      <div class="row">
+        <input type="text" id="rName" placeholder="Full Name *" required>
+        <input type="tel" id="rPhone" placeholder="Phone *" required>
+      </div>
+      <div class="row">
+        <input type="email" id="rEmail" placeholder="Email">
+        <input type="number" id="rGuests" placeholder="Guests *" min="1" max="20" value="2" required>
+      </div>
+      <div class="row">
+        <input type="date" id="rDate" required>
+        <input type="time" id="rTime" required>
+      </div>
+      <select id="rOccasion">
+        <option value="">Occasion (Optional)</option>
+        <option>Birthday</option><option>Anniversary</option><option>Family Dinner</option><option>Business Meeting</option>
+      </select>
+      <textarea id="rMsg" placeholder="Special Requests (e.g. Window seat, Jain food)"></textarea>
+      <button type="submit" class="btn" style="width:100%">Reserve Table</button>
+    </form>
+    <div class="info-box">
+      <h3>Visit Us</h3>
+      <p>📍 Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033</p>
+      <p>⏰ Mon-Sun: 11:00 AM - 11:00 PM</p>
+      <p>📞 +91 98765 43210 | +91 91234 56789</p>
+      <p>✉️ hello@spicevilla.com</p>
+      <br>
+      <h3>Why Reserve?</h3>
+      <p>✅ No waiting time<br>✅ Free complimentary starter<br>✅ Best table guaranteed<br>✅ Birthday decor free</p>
+      <div style="background:#fff8f0;padding:12px;border-radius:10px;margin-top:15px;border:1px dashed var(--orange)">
+        <b>Today's Bookings: <span id="todayCount">12</span> tables</b><br><small>Hurry, only few tables left for tonight!</small>
+      </div>
+      <div id="resList" style="margin-top:15px"></div>
+    </div>
+  </div>
+</section>
+
+<section id="location" class="section">
+  <h2 class="title">Find Us</h2>
+  <div class="loc-grid">
+    <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.445!2d78.399!3d17.43!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93e!2sJubilee%20Hills%20Hyderabad!5e0!3m2!1sen!2sin!4v1"></iframe>
+    <div class="form-box">
+      <h3>Delivery & Takeaway</h3>
+      <p>🚚 Free delivery within 5km<br>🛵 30 mins delivery guarantee<br>🥡 Takeaway 10% OFF</p><br>
+      <input type="text" placeholder="Enter Your Area Pincode" id="pin"><br>
+      <button class="btn" onclick="checkPin()">Check Delivery</button>
+      <p id="pinResult" style="margin-top:10px"></p><br>
+      <h3>Follow Us</h3>
+      <p>Instagram: @spicevilla_hyd<br>Swiggy | Zomato | Google Maps: 4.6★ (2,341 reviews)</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer">
+    <div><h4>SpiceVilla</h4><p>Authentic Hyderabadi flavors since 2010. Made with love, served with pride.</p></div>
+    <div><h4>Quick Links</h4><p>Menu<br>Offers<br>Reservation<br>Location</p></div>
+    <div><h4>Contact</h4><p>+91 98765 43210<br>hello@spicevilla.com<br>Jubilee Hills, Hyderabad</p></div>
+  </div>
+  <p class="copy">© 2026 SpiceVilla Restaurant | Demo Project - No real orders | Made with ❤️ in Hyderabad</p>
+</footer>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="modal"><div class="modal-box"><span style="float:right;cursor:pointer;font-size:1.5rem" onclick="closeModal('cartModal')">&times;</span><h3>🛒 Your Order</h3><div id="cartItems" style="margin:15px 0"></div><div style="border-top:1px solid #ddd;padding-top:10px"><p>Subtotal: ₹<span id="subtotal">0</span></p><p id="discountLine" style="color:green"></p><h3>Total: ₹<span id="total">0</span></h3><p style="font-size:0.8rem;color:#666">Note: Demo - orders stored locally only, no real payment.</p><button class="btn" style="width:100%;margin-top:10px" onclick="placeOrder()">Place Order (Demo)</button></div></div></div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const foods=[
+{id:1,name:"Hyderabadi Dum Biryani",cat:"Biryani",price:299,veg:false,img:"https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=500",desc:"Slow cooked basmati, saffron, secret spices"},
+{id:2,name:"Chicken 65",cat:"Starter",price:249,veg:false,img:"https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&w=500",desc:"Spicy fried chicken, curry leaves"},
+{id:3,name:"Paneer Tikka",cat:"Starter",price:229,veg:true,img:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=500",desc:"Grilled cottage cheese, mint chutney"},
+{id:4,name:"Butter Chicken Curry",cat:"Curry",price:279,veg:false,img:"https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=500",desc:"Creamy tomato gravy, tandoori chicken"},
+{id:5,name:"Paneer Butter Masala",cat:"Curry",price:249,veg:true,img:"https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=500",desc:"Rich buttery gravy, soft paneer"},
+{id:6,name:"Butter Naan (2)",cat:"Bread",price:89,veg:true,img:"https://images.unsplash.com/photo-1626100862962-56ca6cf0d7bd?auto=format&fit=crop&w=500",desc:"Tandoor baked, butter brushed"},
+{id:7,name:"Gulab Jamun (2)",cat:"Dessert",price:99,veg:true,img:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=500",desc:"Soft milk balls, sugar syrup"},
+{id:8,name:"Mutton Biryani",cat:"Biryani",price:399,veg:false,img:"https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=500",desc:"Juicy mutton, long grain rice, fried onions"},
+{id:9,name:"Veg Biryani",cat:"Biryani",price:219,veg:true,img:"https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=500",desc:"Mixed veggies, saffron rice"},
+{id:10,name:"Apricot Delight",cat:"Dessert",price:129,veg:true,img:"https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=500",desc:"Hyderabadi special dessert"}
+];
+let cart=JSON.parse(localStorage.getItem('sv_cart'))||[];
+let offerCode="";
+
+function renderMenu(list){ menuGrid.innerHTML=list.map(f=>`<div class="food"><img src="${f.img}"><div class="food-body"><h4>${f.name} <span class="price">₹${f.price}</span></h4><p>${f.desc}</p><div class="food-foot"><span class="veg ${f.veg?'veg-true':'veg-false'}">${f.veg?'🟢 VEG':'🔴 NON-VEG'} • ${f.cat}</span><button class="btn" style="padding:6px 14px;font-size:0.85rem" onclick="addToCart(${f.id})">Add +</button></div></div></div>`).join(''); }
+function filterMenu(cat,btn){ document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(cat=='all') renderMenu(foods); else if(cat=='veg') renderMenu(foods.filter(f=>f.veg)); else renderMenu(foods.filter(f=>f.cat==cat)); }
+function addToCart(id){ const item=foods.find(f=>f.id==id); const exist=cart.find(c=>c.id==id); if(exist) exist.qty++; else cart.push({...item,qty:1}); localStorage.setItem('sv_cart',JSON.stringify(cart)); updateCart(); toast(item.name+" added"); }
+function addCombo(){ cart.push({id:99,name:"Family Combo",price:999,qty:1,img:""}); updateCart(); openCart(); }
+function updateCart(){ cartCount.innerText=cart.reduce((s,c)=>s+c.qty,0); let sub=cart.reduce((s,c)=>s+c.price*c.qty,0); let disc=0; if(offerCode=='BIRYANI50'){ let biryaniTotal=cart.filter(c=>foods.find(f=>f.id==c.id)?.cat=='Biryani').reduce((s,c)=>s+c.price*c.qty,0); disc=Math.floor(biryaniTotal*0.5); } if(sub>500 &&!cart.find(c=>c.name.includes("Gulab"))){ document.getElementById('discountLine').innerText="Free Gulab Jamun will be added!"; } let html=cart.map(c=>`<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>${c.name} x ${c.qty}</span><span>₹${c.price*c.qty} <button onclick="removeCart(${c.id})" style="color:red;border:none;background:none;cursor:pointer">x</button></span></div>`).join(''); cartItems.innerHTML=html||"Cart empty"; subtotal.innerText=sub; total.innerText=sub-disc; if(disc>0) discountLine.innerText="Discount (BIRYANI50): -₹"+disc; else if(offerCode) discountLine.innerText="Offer: "+offerCode+" applied"; else discountLine.innerText=""; }
+function removeCart(id){ cart=cart.filter(c=>c.id!=id); localStorage.setItem('sv_cart',JSON.stringify(cart)); updateCart(); }
+function openCart(){ updateCart(); cartModal.classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function applyOffer(code){ offerCode=code; toast("Offer "+code+" applied! 50% off on Biryani"); updateCart(); openCart(); }
+function placeOrder(){ if(cart.length==0){ toast("Cart empty"); return; } const ref="SV"+Math.floor(100000+Math.random()*900000); alert("✅ Order Placed! Ref: "+ref+"\\nTotal: ₹"+document.getElementById('total').innerText+"\\n\\nDemo: Stored locally only, no real payment.\\nWill be delivered in 30 mins (demo)."); cart=[]; localStorage.setItem('sv_cart',JSON.stringify(cart)); updateCart(); closeModal('cartModal'); }
+function toast(msg){ const t=document.getElementById('toast'); t.innerText=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+document.getElementById('resForm').addEventListener('submit',e=>{ e.preventDefault(); const today=new Date().toISOString().split('T')[0]; if(rDate.value < today){ toast("Past date not allowed"); return; } const data={name:rName.value,guests:rGuests.value,date:rDate.value,time:rTime.value}; let list=JSON.parse(localStorage.getItem('sv_res'))||[]; list.push(data); localStorage.setItem('sv_res',JSON.stringify(list)); resList.innerHTML=`<div style="background:#e8f5e9;padding:10px;border-radius:10px;margin-top:10px">✅ Table reserved for ${data.name}<br>${data.guests} Guests on ${data.date} at ${data.time}<br>Ref: SVT${Math.floor(10000+Math.random()*90000)}</div>`; toast("Table Reserved!"); e.target.reset(); todayCount.innerText=parseInt(todayCount.innerText)+1; });
+function checkPin(){ const p=pin.value; if(!p){ toast("Enter pincode"); return; } if(p.startsWith("500")){ pinResult.innerHTML="<span style='color:green'>✅ Delivery available! Free delivery, 30 mins</span>"; } else { pinResult.innerHTML="<span style='color:red'>❌ Sorry, we deliver only in Hyderabad (500xxx)</span>"; } }
+// Init
+renderMenu(foods); updateCart();
+const today=new Date().toISOString().split('T')[0]; document.getElementById('rDate').min=today;
+let res=JSON.parse(localStorage.getItem('sv_res'))||[]; document.getElementById('todayCount').innerText=12+res.length;
+</script>
+</body>
+</html>
